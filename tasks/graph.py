@@ -1,4 +1,6 @@
 from typing import Any
+import queue
+import collections
 
 __all__ = (
     'Node',
@@ -28,7 +30,45 @@ class Graph:
         self._root = root
 
     def dfs(self) -> list[Node]:
-        raise NotImplementedError
+        answer, q = [self._root], collections.deque()
+        q.append(self._root)
+        use = {self._root}
+        while q:
+            now = q[0]
+            flag = True
+            for nod in now.outbound:
+                if nod not in use:
+                    q.appendleft(nod)
+                    answer.append(nod)
+                    use.add(nod)
+                    flag = False
+                    break
+            if flag:
+                q.popleft()
+        return answer
 
     def bfs(self) -> list[Node]:
-        raise NotImplementedError
+        answer, q = [], queue.Queue()
+        q.put(self._root)
+        use = {self._root}
+        while not q.empty():
+            now = q.get()
+            answer.append(now)
+            for nod in now.outbound:
+                if nod not in use:
+                    q.put(nod)
+                    use.add(nod)
+
+        return answer
+
+
+a = Node('a')
+b = Node('b')
+c = Node('c')
+d = Node('d')
+a.point_to(b)
+b.point_to(d)
+a.point_to(c)
+g = Graph(a)
+
+print(g.dfs())

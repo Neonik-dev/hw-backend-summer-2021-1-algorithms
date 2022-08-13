@@ -9,4 +9,10 @@ def even_odd(arr: list[int]) -> float:
     Пример:
     even_odd([1, 2, 3, 4, 5]) == 0.8889
     """
-    raise NotImplementedError
+    chet = 0
+    for i in arr:
+        if i % 2 == 0:
+            chet += i
+    if chet == sum(arr):
+        return 0
+    return chet / (sum(arr) - chet)
